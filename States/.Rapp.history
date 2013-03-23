@@ -1,0 +1,1686 @@
+muhat
+muhat = fixef(MLE)
+muhat
+muhat = fixef(MLE)#
+sigmahat = VarCorr(MLE)$litter[1]#
+aloop = 2#
+iterates = 0#
+for(i in 1:K){#
+	iterates = iterates + 1#
+	for(j in i:aloop){#
+		alpha.mat = sapply(1:L, MH)#
+	}#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma2
+mu = c()#
+sigma2 = c()
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigmahat))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+muhat = fixef(MLE)#
+sigmahat = VarCorr(MLE)$litter[1]#
+aloop = 2#
+iterates = 0#
+for(i in 1:K){#
+	iterates = iterates + 1#
+	for(j in i:aloop){#
+		alpha.mat = sapply(1:L, MH)#
+	}#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma2
+K = 25 	## Number of iterations
+mu = c()#
+sigma2 = c()#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigmahat))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+muhat = fixef(MLE)#
+sigmahat = VarCorr(MLE)$litter[1]#
+aloop = 2#
+iterates = 0#
+for(i in 1:K){#
+	iterates = iterates + 1#
+	for(j in i:aloop){#
+		alpha.mat = sapply(1:L, MH)#
+	}#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma2
+options(error = recover)#
+### Getting the dataset:#
+#
+counts = c(15,1,rep(0,9),6,1,2,rep(0,8),6,6,rep(0,9),7,2,3,0,2,rep(0,6),16,9,3,3,1,rep(0,6),57,38,17,2,2,rep(0,6),119,81,45,6,1,0,0,1,rep(0,3),173,118,57,16,3,0,0,0,1,rep(0,2),136,103,50,13,6,1,1,rep(0,4),54,51,32,5,1,0,0,0,0,1,0,13,15,12,3,1,rep(0,6),0,4,3,1,rep(0,7),0,0,1,rep(0,4),1,rep(0,3))#
+#
+data.mat = matrix(counts, nrow = 13, ncol = 11, byrow = TRUE)#
+#
+dies = list(0,1,c(0,0),c(0,1),c(1,1),rep(0,3),c(0,0,1),rep(0,4),c(rep(0,3),1),c(0,0,1,1),c(1,1,1,1),rep(0,5),c(rep(0,4),1),c(rep(0,3),1,1),c(0,0,1,1,1),c(0,rep(1,4)),rep(0,6),c(rep(0,5),1),c(rep(0,4),1,1),c(rep(0,3),rep(1,3)),c(0,0,rep(1,4)),rep(0,7),c(rep(0,6),1),c(rep(0,5),1,1),c(rep(0,4),1,1,1),c(rep(0,3),rep(1,4)),rep(1,7),rep(0,8),c(rep(0,7),1),c(rep(0,6),1,1),c(rep(0,5),rep(1,3)),c(rep(0,4),rep(1,4)),rep(1,8),rep(0,9),c(rep(0,8),1),c(rep(0,7),1,1),c(rep(0,6),1,1,1),c(rep(0,5),rep(1,4)),c(rep(0,4),rep(1,5)),c(rep(0,3),rep(1,6)),rep(0,10),c(rep(0,9),1),c(rep(0,8),1,1),c(rep(0,7),rep(1,3)),c(rep(0,6),rep(1,4)),c(0,rep(1,9)),rep(0,11),c(rep(0,10),1),c(rep(0,9),1,1),c(rep(0,8),rep(1,3)),c(rep(0,7),rep(1,4)),c(rep(0,11),1),c(rep(0,10),1,1),c(rep(0,9),1,1,1),c(rep(0,11),1,1),c(rep(0,6),rep(1,7)))#
+#
+reptime = counts[which(counts != 0)]#
+#
+Y_ij = unlist(sapply(1:length(reptime), function(i) rep(dies[[i]],reptime[i])))#
+#
+Num_y = seq(1:sum(data.mat))#
+counts.no.zero = lapply(1:13, function(i) data.mat[i,][which(data.mat[i,] != 0)])#
+#
+lit_num = c()#
+Ya = Num_y#
+for (i in 1:length(counts.no.zero)){#
+	lit_num[[i]] = rep(Ya[1:sum(counts.no.zero[[i]])],each = i)#
+	Ya = Ya[(sum(counts.no.zero[[i]])+1):length(Ya)]#
+}#
+#
+data = data.frame(Y_ij,unlist(lit_num))#
+names(data) = c("Yij","litter")#
+#
+#### Start Analyzing:#
+library(lme4)#
+#
+MLE = lmer(Y_ij ~ 1+(1|litter), data = data, family=binomial)#
+summary(MLE)#
+#
+#sigma2.1st = VarCorr(MLE)$litter[1]#
+#mu.1st = fixef(MLE)#
+#
+m = sum(data.mat)#
+#
+Pij = function(mu, alpha){#
+	exp(mu + alpha)/(1 + exp(mu + alpha))#
+}#
+#
+by_j = split(data, data$litter)#
+y_by_j = sapply(1:m, function(i) sum(by_j[[i]][['Yij']]))#
+#
+ni = (data.frame(table(data$litter)))$Freq#
+#
+alpha.gen = function(mu, sigma2){#
+	rnorm(m, mu, sqrt(sigma2))#
+}#
+#
+L = 140#
+#alphas = lapply(1:L, function(i) alpha.gen(mu.1st, sigma2.1st))#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+Estep.mu = function(mu, alphas){#
+	L = ncol(alphas)#
+	-sum(sapply(1:L, function(i){#
+		sum((ni-y_by_j) * log(1-Pij(mu,alphas[,i])) +y_by_j*log(Pij(mu, alphas[,i])))}))/L#
+}#
+#
+MLsigma2 = function(alphas){#
+	mean(sapply(1:L, function(i) sum(alphas[,i]^2)/m))#
+}#
+#
+Estep.sigma2 = function(sigma2, alphas){#
+	L = ncol(alphas)#
+	sum(sapply(1:L, function(i){#
+		(-m/2)*log(2*pi*sigma2) - (1/(2*sigma2))*sum((alphas[,i])^2)#
+	}))/L#
+}#
+#
+K = 125 	## Number of iterations#
+#
+accept.ratio = function(mu, a.new, a.old){#
+	f.new = Pij(mu, a.new)#
+	f.old = Pij(mu, a.old)#
+	return(f.new/f.old)#
+}#
+#
+set.seed(232)#
+#
+param.1st = c(mu.1st, sigma2.1st)#
+#
+mu = c()#
+sigma2 = c()#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigmahat))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+muhat = fixef(MLE)#
+sigmahat = VarCorr(MLE)$litter[1]#
+aloop = 2#
+iterates = 0#
+for(i in 1:K){#
+	iterates = iterates + 1#
+	for(j in i:aloop){#
+		alpha.mat = sapply(1:L, MH)#
+	}#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma2
+muhat
+muhat = fixef(MLE)
+muhat
+options(error = recover)#
+### Getting the dataset:#
+#
+counts = c(15,1,rep(0,9),6,1,2,rep(0,8),6,6,rep(0,9),7,2,3,0,2,rep(0,6),16,9,3,3,1,rep(0,6),57,38,17,2,2,rep(0,6),119,81,45,6,1,0,0,1,rep(0,3),173,118,57,16,3,0,0,0,1,rep(0,2),136,103,50,13,6,1,1,rep(0,4),54,51,32,5,1,0,0,0,0,1,0,13,15,12,3,1,rep(0,6),0,4,3,1,rep(0,7),0,0,1,rep(0,4),1,rep(0,3))#
+#
+data.mat = matrix(counts, nrow = 13, ncol = 11, byrow = TRUE)#
+#
+dies = list(0,1,c(0,0),c(0,1),c(1,1),rep(0,3),c(0,0,1),rep(0,4),c(rep(0,3),1),c(0,0,1,1),c(1,1,1,1),rep(0,5),c(rep(0,4),1),c(rep(0,3),1,1),c(0,0,1,1,1),c(0,rep(1,4)),rep(0,6),c(rep(0,5),1),c(rep(0,4),1,1),c(rep(0,3),rep(1,3)),c(0,0,rep(1,4)),rep(0,7),c(rep(0,6),1),c(rep(0,5),1,1),c(rep(0,4),1,1,1),c(rep(0,3),rep(1,4)),rep(1,7),rep(0,8),c(rep(0,7),1),c(rep(0,6),1,1),c(rep(0,5),rep(1,3)),c(rep(0,4),rep(1,4)),rep(1,8),rep(0,9),c(rep(0,8),1),c(rep(0,7),1,1),c(rep(0,6),1,1,1),c(rep(0,5),rep(1,4)),c(rep(0,4),rep(1,5)),c(rep(0,3),rep(1,6)),rep(0,10),c(rep(0,9),1),c(rep(0,8),1,1),c(rep(0,7),rep(1,3)),c(rep(0,6),rep(1,4)),c(0,rep(1,9)),rep(0,11),c(rep(0,10),1),c(rep(0,9),1,1),c(rep(0,8),rep(1,3)),c(rep(0,7),rep(1,4)),c(rep(0,11),1),c(rep(0,10),1,1),c(rep(0,9),1,1,1),c(rep(0,11),1,1),c(rep(0,6),rep(1,7)))#
+#
+reptime = counts[which(counts != 0)]#
+#
+Y_ij = unlist(sapply(1:length(reptime), function(i) rep(dies[[i]],reptime[i])))#
+#
+Num_y = seq(1:sum(data.mat))#
+counts.no.zero = lapply(1:13, function(i) data.mat[i,][which(data.mat[i,] != 0)])#
+#
+lit_num = c()#
+Ya = Num_y#
+for (i in 1:length(counts.no.zero)){#
+	lit_num[[i]] = rep(Ya[1:sum(counts.no.zero[[i]])],each = i)#
+	Ya = Ya[(sum(counts.no.zero[[i]])+1):length(Ya)]#
+}#
+#
+data = data.frame(Y_ij,unlist(lit_num))#
+names(data) = c("Yij","litter")#
+#
+#### Start Analyzing:#
+library(lme4)#
+#
+MLE = lmer(Y_ij ~ 1+(1|litter), data = data, family=binomial)#
+summary(MLE)#
+#
+#sigma2.1st = VarCorr(MLE)$litter[1]#
+#mu.1st = fixef(MLE)#
+#
+m = sum(data.mat)#
+#
+Pij = function(mu, alpha){#
+	exp(mu + alpha)/(1 + exp(mu + alpha))#
+}#
+#
+by_j = split(data, data$litter)#
+y_by_j = sapply(1:m, function(i) sum(by_j[[i]][['Yij']]))#
+#
+ni = (data.frame(table(data$litter)))$Freq#
+#
+alpha.gen = function(mu, sigma2){#
+	rnorm(m, mu, sqrt(sigma2))#
+}#
+#
+L = 140#
+#alphas = lapply(1:L, function(i) alpha.gen(mu.1st, sigma2.1st))#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+Estep.mu = function(mu, alphas){#
+	L = ncol(alphas)#
+	-sum(sapply(1:L, function(i){#
+		sum((ni-y_by_j) * log(1-Pij(mu,alphas[,i])) +y_by_j*log(Pij(mu, alphas[,i])))}))/L#
+}#
+#
+MLsigma2 = function(alphas){#
+	mean(sapply(1:L, function(i) sum(alphas[,i]^2)/m))#
+}#
+#
+Estep.sigma2 = function(sigma2, alphas){#
+	L = ncol(alphas)#
+	sum(sapply(1:L, function(i){#
+		(-m/2)*log(2*pi*sigma2) - (1/(2*sigma2))*sum((alphas[,i])^2)#
+	}))/L#
+}#
+#
+K = 125 	## Number of iterations#
+#
+accept.ratio = function(mu, a.new, a.old){#
+	f.new = Pij(mu, a.new)#
+	f.old = Pij(mu, a.old)#
+	return(f.new/f.old)#
+}#
+#
+set.seed(232)#
+#
+param.1st = c(mu.1st, sigma2.1st)#
+#
+mu = c()#
+sigma2 = c()#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigmahat))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+muhat = fixef(MLE)#
+sigmahat = VarCorr(MLE)$litter[1]#
+aloop = 2#
+iterates = 0#
+for(i in 1:K){#
+	iterates = iterates + 1#
+	for(j in i:aloop){#
+		alpha.mat = sapply(1:L, MH)#
+	}#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+K = 12 	## Number of iterations
+mu = c()#
+sigma2 = c()#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigmahat))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+muhat = fixef(MLE)#
+sigmahat = VarCorr(MLE)$litter[1]#
+aloop = 2#
+iterates = 0#
+for(i in 1:K){#
+	iterates = iterates + 1#
+	#for(j in i:aloop){#
+		alpha.mat = sapply(1:L, MH)#
+	#}#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma
+sigma2
+param.1st = c(mu.1st, sigma2.1st)#
+#
+mu = c()#
+sigma2 = c()#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[2] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma2
+mu = c()#
+sigma2 = c()#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i] = muhat#
+	sigma2[i] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma2
+mu = c()#
+sigma2 = c()#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat1#
+	print(iterates)#
+}
+mu
+sigma2
+set.seed(232)#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2#
+	print(iterates)#
+}
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+m
+mu
+sigma
+sigma2
+alpha.mat = matrix(sapply(1:L, rnorm, mu = mu.1st, sd = sqrt(sigmq2.1st)), ncol = L, nrow = m)
+alpha.mat = matrix(sapply(1:L, function(i) rnorm, mu = mu.1st, sd = sqrt(sigmq2.1st)), ncol = L, nrow = m)
+alpha.mat = matrix(sapply(1:L, function(i) rnorm, n = m, mu = mu.1st, sd = sqrt(sigmq2.1st)), ncol = L, nrow = m)
+sapply(1:L, function(i) rnorm, n = m, mu = mu.1st, sd = sqrt(sigmq2.1st))
+alpha.mat = matrix(sapply(1:L, function(i) rnorm, n = m, mu = mu.1st, sd = sqrt(sigma2.1st)), ncol = L, nrow = m)
+sapply(1:L, function(i) rnorm, n = m, mu = mu.1st, sd = sqrt(sigma2.1st))
+alpha.mat = matrix(sapply(1:L, function(i) {rnorm, n = m, mu = mu.1st, sd = sqrt(sigma2.1st)}), ncol = L, nrow = m)
+alpha.mat = matrix(sapply(1:L, function(i) {rnorm(n = m, mu = mu.1st, sd = sqrt(sigma2.1st))}), ncol = L, nrow = m)
+alpha.mat = matrix(apply(1:L, 1, function(i) {rnorm(n = m, mu = mu.1st, sd = sqrt(sigma2.1st))}), ncol = L, nrow = m)
+alpha.mat = matrix(apply(1:L, 1, function(i) {a[[i]] = rnorm(n = m, mu = mu.1st, sd = sqrt(sigma2.1st))}), ncol = L, nrow = m)
+alpha.mat = matrix(sapply(1:L, function(i) {a[[i]] = rnorm(n = m, mu = mu.1st, sd = sqrt(sigma2.1st))}), ncol = L, nrow = m)
+rnorm(n = m, mu = mu.1st, sd = sqrt(sigma2.1st))
+rnorm
+rnorm(m,mu.1st,sigam2)
+rnorm(m,mu.1st,sigma2)
+rnorm(n = m, mu = mu.1st, sd = sqrt(sigma2.1st))
+rnorm(n=m,mu=mu.1st,sd=sigam2)
+alpha.mat = matrix(sapply(1:L, function(i) {a[[i]] = rnorm(m, mu.1st, sqrt(sigma2.1st))}), ncol = L, nrow = m)
+alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, mu.1st, sqrt(sigma2.1st))}), ncol = L, nrow = m)
+alpha.mat
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, mu.1st, sqrt(sigma2.1st))}), ncol = L, nrow = m)#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	#sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, mu.1st, sqrt(sigma2.1st))}), ncol = L, nrow = m)#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+iterates = 0#
+for(i in 1:K){#
+	#mu[1] = mu.1st#
+	#sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	#sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, mu.1st, sqrt(sigma2.1st))}), ncol = L, nrow = m)#
+#
+MH = function(i, mu, sigma2){#
+	astar = rnorm(m, mu, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	#mu[1] = mu.1st#
+	#sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	#sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	#mu[1] = mu.1st#
+	#sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat1#
+	print(iterates)#
+}
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, mu.1st, sqrt(sigma2.1st))}), ncol = L, nrow = m)#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	#mu[1] = mu.1st#
+	#sigma2[1] = sigma2.1st#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat1#
+	print(iterates)#
+}
+alpha.mat = matrix(0, ncol = L, nrow = m)
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(mu.1st, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}
+set.seed(232)#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma1[1] = sigma.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+sigma2.1st = VarCorr(MLE)$litter[1]
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma1[1] = sigma.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma1[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(i){#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	a = alpha.mat[,i]#
+	ratio = accept.ratio(muhat, a, astar)#
+	Ui = runif(m, 0, 1)#
+	a[Ui<ratio] = astar[Ui<ratio]#
+	alpha.mat[,i] = a#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = sapply(1:L, MH, mu = mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+}
+MH(12, 2,1)
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+}
+MH(12, 2,1)
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}
+MH(12, 2,1)
+set.seed(232)#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigam2
+sigma2
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat1#
+	print(iterates)#
+}
+sigma2
+mu
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	#sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+Estep.sigma2 = function(sigma2, alphas){#
+	L = ncol(alphas)#
+	-sum(sapply(1:L, function(i){#
+		(-m/2)*log(2*pi*sigma2) - (1/(2*sigma2))*sum((alphas[,i])^2)#
+	}))/L#
+}
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	#sigmahat1 = MLsigma2(alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+sgiam2
+sigam2
+sigma2
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+sigma2
+mu
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+mu.1st
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}
+MH(12, -2.29, .277)
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+options(error = recover)#
+### Getting the dataset:#
+#
+counts = c(15,1,rep(0,9),6,1,2,rep(0,8),6,6,rep(0,9),7,2,3,0,2,rep(0,6),16,9,3,3,1,rep(0,6),57,38,17,2,2,rep(0,6),119,81,45,6,1,0,0,1,rep(0,3),173,118,57,16,3,0,0,0,1,rep(0,2),136,103,50,13,6,1,1,rep(0,4),54,51,32,5,1,0,0,0,0,1,0,13,15,12,3,1,rep(0,6),0,4,3,1,rep(0,7),0,0,1,rep(0,4),1,rep(0,3))#
+#
+data.mat = matrix(counts, nrow = 13, ncol = 11, byrow = TRUE)#
+#
+dies = list(0,1,c(0,0),c(0,1),c(1,1),rep(0,3),c(0,0,1),rep(0,4),c(rep(0,3),1),c(0,0,1,1),c(1,1,1,1),rep(0,5),c(rep(0,4),1),c(rep(0,3),1,1),c(0,0,1,1,1),c(0,rep(1,4)),rep(0,6),c(rep(0,5),1),c(rep(0,4),1,1),c(rep(0,3),rep(1,3)),c(0,0,rep(1,4)),rep(0,7),c(rep(0,6),1),c(rep(0,5),1,1),c(rep(0,4),1,1,1),c(rep(0,3),rep(1,4)),rep(1,7),rep(0,8),c(rep(0,7),1),c(rep(0,6),1,1),c(rep(0,5),rep(1,3)),c(rep(0,4),rep(1,4)),rep(1,8),rep(0,9),c(rep(0,8),1),c(rep(0,7),1,1),c(rep(0,6),1,1,1),c(rep(0,5),rep(1,4)),c(rep(0,4),rep(1,5)),c(rep(0,3),rep(1,6)),rep(0,10),c(rep(0,9),1),c(rep(0,8),1,1),c(rep(0,7),rep(1,3)),c(rep(0,6),rep(1,4)),c(0,rep(1,9)),rep(0,11),c(rep(0,10),1),c(rep(0,9),1,1),c(rep(0,8),rep(1,3)),c(rep(0,7),rep(1,4)),c(rep(0,11),1),c(rep(0,10),1,1),c(rep(0,9),1,1,1),c(rep(0,11),1,1),c(rep(0,6),rep(1,7)))#
+#
+reptime = counts[which(counts != 0)]#
+#
+Y_ij = unlist(sapply(1:length(reptime), function(i) rep(dies[[i]],reptime[i])))#
+#
+Num_y = seq(1:sum(data.mat))#
+counts.no.zero = lapply(1:13, function(i) data.mat[i,][which(data.mat[i,] != 0)])#
+#
+lit_num = c()#
+Ya = Num_y#
+for (i in 1:length(counts.no.zero)){#
+	lit_num[[i]] = rep(Ya[1:sum(counts.no.zero[[i]])],each = i)#
+	Ya = Ya[(sum(counts.no.zero[[i]])+1):length(Ya)]#
+}#
+#
+data = data.frame(Y_ij,unlist(lit_num))#
+names(data) = c("Yij","litter")#
+#
+#### Start Analyzing:#
+library(lme4)#
+#
+MLE = lmer(Y_ij ~ 1+(1|litter), data = data, family=binomial)#
+summary(MLE)#
+#
+#sigma2.1st = VarCorr(MLE)$litter[1]#
+#mu.1st = fixef(MLE)#
+#
+m = sum(data.mat)#
+#
+Pij = function(mu, alpha){#
+	exp(mu + alpha)/(1 + exp(mu + alpha))#
+}#
+#
+by_j = split(data, data$litter)#
+y_by_j = sapply(1:m, function(i) sum(by_j[[i]][['Yij']]))#
+#
+ni = (data.frame(table(data$litter)))$Freq#
+#
+alpha.gen = function(mu, sigma2){#
+	rnorm(m, mu, sqrt(sigma2))#
+}#
+#
+L = 140#
+#alphas = lapply(1:L, function(i) alpha.gen(mu.1st, sigma2.1st))#
+#
+Estep.mu = function(mu, alphas){#
+	L = ncol(alphas)#
+	-sum(sapply(1:L, function(i){#
+		sum((ni-y_by_j) * log(1-Pij(mu,alphas[,i])) +y_by_j*log(Pij(mu, alphas[,i])))}))/L#
+}#
+#
+MLsigma2 = function(alphas){#
+	mean(sapply(1:L, function(i) sum(alphas[,i]^2)/m))#
+}#
+#
+Estep.sigma2 = function(sigma2, alphas){#
+	L = ncol(alphas)#
+	-sum(sapply(1:L, function(i){#
+		(-m/2)*log(2*pi*sigma2) - (1/(2*sigma2))*sum((alphas[,i])^2)#
+	}))/L#
+}#
+#
+K = 12 	## Number of iterations#
+#
+accept.ratio = function(mu, a.new, a.old){#
+	f.new = Pij(mu, a.new)#
+	f.old = Pij(mu, a.old)#
+	return(f.new/f.old)#
+}#
+#
+#set.seed(232)#
+#
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(muhat, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu.1st = fixef(MLE)#
+sigma2.1st = VarCorr(MLE)$litter[1]#
+#
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	for (i in 1:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(mu, a, astar)#
+		Ui = runif(m, 0, 1)#
+		a[Ui<ratio] = astar[Ui<ratio]#
+		alpha.mat[,i] = a#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	alpha.mat[,1] = astar#
+	for (i in 2:L){#
+		a = alpha.mat[,i]#
+		ratio = accept.ratio(mu, a[i], a[(i-1)])#
+		Ui = runif(m, 0, 1)#
+		a[i][Ui<ratio] = a[(i-1)][Ui<ratio]#
+		alpha.mat[,i] = a[i]#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+warnings()
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	alpha.mat[,1] = astar#
+	for (i in 2:L){#
+		a[i] = alpha.mat[,i]#
+		ratio = accept.ratio(mu, a[i], a[(i-1)])#
+		Ui = runif(m, 0, 1)#
+		a[i][Ui<ratio] = a[(i-1)][Ui<ratio]#
+		alpha.mat[,i] = a[i]#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	alpha.mat[,1] = astar#
+	a = c()#
+	for (i in 2:L){#
+		a[i] = alpha.mat[,i]#
+		ratio = accept.ratio(mu, a[i], a[(i-1)])#
+		Ui = runif(m, 0, 1)#
+		a[i][Ui<ratio] = a[(i-1)][Ui<ratio]#
+		alpha.mat[,i] = a[i]#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	alpha.mat[,1] = astar#
+	a = c()#
+	for (i in 2:L){#
+		#a[i] = alpha.mat[,i]#
+		ratio = accept.ratio(mu, alpha.mat[,i][i], alpha.mat[,i][(i-1)])#
+		Ui = runif(m, 0, 1)#
+		alpha.mat[,i][i][Ui<ratio] = alpha.mat[,i][(i-1)][Ui<ratio]#
+		#alpha.mat[,i] = a[i]#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+warnings()
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	alpha.mat[,1] = astar#
+	a = c()#
+	for (i in 2:L){#
+		#a[i] = alpha.mat[,i]#
+		ratio = accept.ratio(mu, alpha.mat[,i], alpha.mat[,(i-1)])#
+		Ui = runif(m, 0, 1)#
+		alpha.mat[,i][Ui<ratio] = alpha.mat[,(i-1)][Ui<ratio]#
+		#alpha.mat[,i] = a[i]#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+alpha.mat
+class(alpha.mat)
+dim(alpha.mat)
+alpha.mat[,1]
+alpha.mat[,1][1]
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	alpha.mat[,1] = astar#
+	a = c()#
+	for (i in 2:L){#
+		for (j in 1:m){#
+		#a[i] = alpha.mat[,i]#
+			ratio = accept.ratio(mu, alpha.mat[,i][j], alpha.mat[,(i-1)][(j)])#
+			Ui = runif(m, 0, 1)#
+			alpha.mat[,i][j][Ui<ratio] = alpha.mat[,i][(j)][Ui<ratio]#
+		#alpha.mat[,i] = a[i]#
+		}#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+warnings()
+mu = c()#
+sigma2 = c()#
+alpha.mat = matrix(0, ncol = L, nrow = m)#
+#
+MH = function(L, mu, sigma2){#
+	alpha.mat = matrix(sapply(1:L, function(i) {alpha.mat[,i] = rnorm(m, 0, sqrt(sigma2))}),ncol = L, nrow = m)#
+	astar = rnorm(m, 0, sqrt(sigma2))#
+	alpha.mat[,1] = astar#
+	a = c()#
+	for (i in 2:L){#
+		#a[i] = alpha.mat[,i]#
+		ratio = accept.ratio(mu, alpha.mat[,i][i], alpha.mat[,(i-1)][(i-1)])#
+		Ui = runif(m, 0, 1)#
+		alpha.mat[,i][i][Ui<ratio] = alpha.mat[,i][(i-1)][Ui<ratio]#
+		#alpha.mat[,i] = a[i]#
+	}#
+	return(alpha.mat)#
+}#
+#
+iterates = 0#
+for(i in 1:K){#
+	mu[1] = mu.1st#
+	sigma2[1] = sigma2.1st#
+#
+	iterates = iterates + 1#
+	alpha.mat = MH(L, mu[i], sigma2[i])#
+	muhat = optimize(Estep.mu, c(-10,10), alphas = alpha.mat)#
+	sigmahat2 = optimize(Estep.sigma2, c(0,10), alphas = alpha.mat)#
+	muhat = as.numeric(muhat[[1]])#
+	mu[i+1] = muhat#
+	sigma2[i+1] = sigmahat2[[1]]#
+	print(iterates)#
+}
+mu
+sigma2
+?file.path
+ff
+txt = readLines("http://eeyore.ucdavis.edu/stat242/data")#
+ll = grep("csv.bz2", txt)#
+#
+library(XML)#
+doc = htmlParse("http://eeyore.ucdavis.edu/stat242/data")#
+getNodeSet(doc, "//a/@href[contains(., 'csv.bz2')]")#
+unlist(getNodeSet(doc, "//a/@href[contains(., 'csv.bz2')]"))#
+ff = sprintf("http://eeyore.ucdavis.edu/stat242/data/%s", unlist(getNodeSet(doc, "//a/@href[contains(., 'csv.bz2')]")))
+ff
+paste("curl -s http://eeyore.ucdavis.edu/stat242/data/" %d{1987:2008}".csv.bz2 -o - | bunzip2")
+paste("curl -s http://eeyore.ucdavis.edu/stat242/data/" %d ".csv.bz2 -o - | bunzip2")
+paste("curl -s http://eeyore.ucdavis.edu/stat242/data/" %d13 ".csv.bz2 -o - | bunzip2")
+getNodeSet(doc, "//a/@href[contains(., 'csv.bz2')]")
+ff = sprintf("http://eeyore.ucdavis.edu/stat242/data/%s", unlist(getNodeSet(doc, "//a/@href[contains(., 'csv.bz2')]")))
+ff
+?paste
+lapply(1987:2008, function(x) paste(x,".csv"))
+lapply(1987:2008, function(x) paste(x,".csv"),sep="")
+lapply(1987:2008, function(x) paste(x,".csv",sep=""))
+sapply(1987:2008, function(x) paste(x,".csv",sep=""))
+filenames = (sapply(1987:2008, function(x) paste(x,".csv",sep="")))
+filenames = sapply(1987:2008, function(x) paste(x,".csv",sep=""))
+filenames
+filenames = sapply(1987:2008, function(x) paste("curl -o ", x,".csv",sep=""))
+filenames
+years = 1987:2008
+years
+filenames = sapply(1:length(ff), function(x) paste("curl -o ", years[x],".csv ",ff[x], " | bunzip2",sep=""))
+filenames
+while(TRUE){#
+	system(filenames)#
+}
+set.seed(11)#
+m = 100#
+k = 5#
+#
+Tot = m*k#
+#
+mu = -.5#
+sigam2 = 2#
+#
+alpha.normal = rnorm(Tot, mu, sqrt(sgima2))
+set.seed(11)#
+m = 100#
+k = 5#
+#
+Tot = m*k#
+#
+mu = -.5#
+sigam2 = 2#
+#
+alpha.normal = rnorm(Tot, mu, sqrt(sigma2))
+set.seed(11)#
+m = 100#
+k = 5#
+#
+Tot = m*k#
+#
+mu = -.5#
+sigma2 = 2#
+#
+alpha.normal = rnorm(Tot, mu, sqrt(sigma2))
+alpha.normal
+qqplot(alpha.normal)
+qqplot(alpha.normal,1:Tot)
+install.packages("VGAM")
+library(VGAM)
+read.table("/Users/shuhualiang/Documents/Davis MS/STA 232B/Final Project/Diabetes.R")
+read.table("/Users/shuhualiang/Documents/Davis MS/STA 232B/Final Project/Diabetes.R", header=TRUE)
+Diabetes = read.table("/Users/shuhualiang/Documents/Davis MS/STA 232B/Final Project/Diabetes.R", header=TRUE)
+head(Diabetes)
+install.packages("LARS")
+install.packages("lars")
+library(lars)
+class(Diabetes)
+as.matrix(Diabetes)
+Diabetes = as.matrix(read.table("/Users/shuhualiang/Documents/Davis MS/STA 232B/Final Project/Diabetes.R", header=TRUE))
+x = as.matrix(Diabetes[1:(length(Diabetes)-1)])
+x
+x = as.matrix(Diabetes[1:(length(Diabetes)-1)], ncol=(length(Diabetes)-1))
+x
+Diabetes = read.table("/Users/shuhualiang/Documents/Davis MS/STA 232B/Final Project/Diabetes.R", header=TRUE)
+x = as.matrix(Diabetes[1:(length(Diabetes)-1)], ncol=(length(Diabetes)-1))
+x
+y = Diabetes[(length(Diabetes)-1)]
+y
+trace = FALSE, normalize = TRUE, intercept = TRUE, Gram, eps = .Machine$double.eps, max.steps)
+?lars
+trace = FALSE, normalize = TRUE, intercept = TRUE, Gram, eps = .Machine$double.eps, max.step, use.Gram = TRUE)
+lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"),trace = FALSE, normalize = TRUE, intercept = TRUE, Gram, eps = .Machine$double.eps, max.step, use.Gram = TRUE)
+lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"),trace = FALSE, normalize = TRUE, intercept = TRUE, Gram, eps = .Machine$double.eps, max.steps, use.Gram = TRUE)
+lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"),trace = FALSE, normalize = TRUE, intercept = TRUE, Gram, eps = .Machine$double.eps, use.Gram = TRUE)
+lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"),trace = FALSE, normalize = TRUE, intercept = TRUE, Gram, eps = .Machine$double.eps)
+lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"))
+LARS = lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"))
+summary(LARS)
+y
+x
+LARS
+summary(LARS)
+LARS = lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"))
+class(x)
+head(Diabetes)
+head(x)
+yead(y)
+yhad(y)
+head(y)
+y = Diabetes[length(Diabetes)]
+head(y)
+LARS = lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"))
+LARS
+Lars = lars(x, y, type = c("lasso", "lar", "forward.stagewise", "stepwise"))
+Lars
+summary(Lars)
+plot(lars(x,y))
+lars(x,y)
+par(mfrow=c(2,2))
+plot(lars(x,y))
+plot(lars(x,y,type="lars"))
+plot(lars(x,y,type="lar"))
+plot(lars(x,y,type="for"))
+attach(Diabetes)
+class(attach(Diabetes))
+x
+y
+Lars = lars(x, y, type = "lasso")
+Lars
+lasso = lars(x, y, type = "lasso")
+lasso
+summary(lasso)
+lar = lars(x, y, type = "lar")
+lar
+summary(lar)
+forward = lars(x, y, type="for")
+summary(forward)
+step = lars(x, y, type = "step")
+summary(step)
+step
+par(mfrow=c(2,2))
+plot(lasso); plot(lar); plot(forward); plot(step)
+load("/Users/shuhualiang/Downloads/BayAreaDelays.rda")
+ls()
+names(BayAreaDelays)
+length(BayAreaDelays$YEAR)
+unique(BayAreaDelays$YEAR)
+setwd("/Users/shuhualiang/Documents/Davis MS/STA 242/Final/States")
+library(shiny)
+runApp()
